@@ -142,17 +142,21 @@ object FoodDao : IFoodDao {
     private val foodList: MutableList<Food> = mutableListOf()
 
     override fun addFood(food: Food) {
-        if (foodList.any { it.name == food.name }) {
-            throw IllegalArgumentException("Food '${food.name}' already exists in the menu.")
-        } else {
-            foodList.add(food)
+        val foundFood = findFoodByName(food.name)
+
+        if (foundFood != null) {
+            throw RuntimeException("Food ${food.name} already exists in the menu.")
         }
+        foodList.add(food)
     }
 
     override fun removeFood(food: Food) {
-        if (!foodList.remove(food)) {
-            throw RuntimeException("Food '${food.name}' does not exist in the menu.")
+        val foundFood = findFoodByName(food.name)
+
+        if (foundFood == null) {
+            throw RuntimeException("Food ${food.name} does not exist in the menu.")
         }
+        foodList.remove(foundFood)
     }
 
     override fun findFoodByName(name: String): Food? {
@@ -168,7 +172,6 @@ object FoodDao : IFoodDao {
         foodToUpdate?.setState(state)
     }
 }
-
 interface IIncomeDao {
     fun getIncome(): Int
     fun addIncome(sum: Int)
