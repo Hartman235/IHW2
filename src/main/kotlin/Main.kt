@@ -496,7 +496,6 @@ class AppRunner(private val inputHandler: InputHandler) {
     }
 }
 
-
 fun main() {
     val server: IServer = Server(FoodDao, IncomeDao)
     val client: IClient = Client(server)
